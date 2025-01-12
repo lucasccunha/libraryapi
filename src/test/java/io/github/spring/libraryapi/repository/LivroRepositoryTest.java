@@ -29,7 +29,7 @@ class LivroRepositoryTest {
         livro.setPreco(BigDecimal.valueOf(100));
         livro.setGenero(GeneroLivro.FICCAO);
         livro.setTitulo("Outro Livro");
-        livro.setDataPublicacao(LocalDate.of(1980,1,2));
+        livro.setDataPublicacao(LocalDate.of(1980, 1, 2));
 
         Autor autor = autorRepository
                 .findById(UUID.fromString("c1b94416-8f30-403e-9d57-54ead105b780"))
@@ -43,16 +43,16 @@ class LivroRepositoryTest {
     @Test
     void salvarAutorELivroTest() {
         Livro livro = new Livro();
-        livro.setIsbn("90000-00000");
+        livro.setIsbn("90001-00000");
         livro.setPreco(BigDecimal.valueOf(100));
-        livro.setGenero(GeneroLivro.FICCAO);
-        livro.setTitulo("Livro Legal");
-        livro.setDataPublicacao(LocalDate.of(1980,1,2));
+        livro.setGenero(GeneroLivro.MISTERIO);
+        livro.setTitulo("Livro bem Bacana");
+        livro.setDataPublicacao(LocalDate.of(2022, 1, 2));
 
         Autor autor = new Autor();
-        autor.setNome("Boris");
+        autor.setNome("Maria");
         autor.setNacionalidade("Brasileira");
-        autor.setDataNascimento(LocalDate.of(1951,1,31));
+        autor.setDataNascimento(LocalDate.of(1951, 1, 31));
 
         autorRepository.save(autor);
 
@@ -68,12 +68,12 @@ class LivroRepositoryTest {
         livro.setPreco(BigDecimal.valueOf(100));
         livro.setGenero(GeneroLivro.FICCAO);
         livro.setTitulo("Livro Legal");
-        livro.setDataPublicacao(LocalDate.of(1980,1,2));
+        livro.setDataPublicacao(LocalDate.of(1980, 1, 2));
 
         Autor autor = new Autor();
         autor.setNome("Boris");
         autor.setNacionalidade("Brasileira");
-        autor.setDataNascimento(LocalDate.of(1951,1,31));
+        autor.setDataNascimento(LocalDate.of(1951, 1, 31));
 
         livro.setAutor(autor);
 
@@ -105,6 +105,7 @@ class LivroRepositoryTest {
         UUID id = UUID.fromString("2fade659-6259-4204-a094-ea37862f8e72");
         repository.deleteById(id);
     }
+
     @Test
     @Transactional
     void buscarLivroTest() {
@@ -122,6 +123,7 @@ class LivroRepositoryTest {
         List<Livro> lista = repository.findByTitulo("O roubo da casa");
         lista.forEach(System.out::println);
     }
+
     @Test
     void pesquisaPorISBNTest() {
         List<Livro> lista = repository.findByIsbn("9999-00000");
@@ -163,6 +165,19 @@ class LivroRepositoryTest {
     @Test
     void listarGenerosDeLivrosAutoresBrasileiros() {
         var resultado = repository.listarGenerosAutoresBrasileiros();
+        resultado.forEach(System.out::println);
+    }
+
+    @Test
+    void listarPorGeneroQueryParamTest() {
+
+        var resultado = repository.findByGenero(GeneroLivro.MISTERIO,"preco");
+        resultado.forEach(System.out::println);
+    }
+    @Test
+    void listarPorGeneroPositionalParamTest() {
+
+        var resultado = repository.findByGenero(GeneroLivro.MISTERIO,"preco");
         resultado.forEach(System.out::println);
     }
 
