@@ -1,7 +1,6 @@
 package io.github.spring.libraryapi.model;
 
 import jakarta.persistence.*;
-import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

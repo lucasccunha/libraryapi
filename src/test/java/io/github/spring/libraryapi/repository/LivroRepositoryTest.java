@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @SpringBootTest
@@ -115,4 +116,54 @@ class LivroRepositoryTest {
         //System.out.println("Autor:");
         //System.out.println(livro.getAutor().getNome());
     }
+
+    @Test
+    void pesquisaPorTituloTest() {
+        List<Livro> lista = repository.findByTitulo("O roubo da casa");
+        lista.forEach(System.out::println);
+    }
+    @Test
+    void pesquisaPorISBNTest() {
+        List<Livro> lista = repository.findByIsbn("9999-00000");
+        lista.forEach(System.out::println);
+    }
+
+    @Test
+    void pesquisaPorTituloEPrecoTest() {
+        var preco = new BigDecimal(204.00);
+        var tituloPesquisa = "O roubo da casa";
+
+        List<Livro> lista = repository.findByTituloAndPreco(tituloPesquisa, preco);
+        lista.forEach(System.out::println);
+    }
+
+    @Test
+    void listarLivrosComQueryJPQL() {
+        var resultado = repository.listarTodosOrdenadoPorTituloAndPreco();
+        resultado.forEach(System.out::println);
+    }
+
+    @Test
+    void listarAutoresDosLivros() {
+        var resultado = repository.listarAutoresDosLivros();
+        resultado.forEach(System.out::println);
+    }
+
+    @Test
+    void listarAutoresComLivros() {
+        var resultado = repository.listarAutoresComLivros();
+        resultado.forEach(autor -> {
+            System.out.println("Autor: " + autor.getNome());
+            autor.getLivros().forEach(livro -> {
+                System.out.println("  Livro: " + livro.getTitulo() + ", ISBN: " + livro.getIsbn());
+            });
+        });
+    }
+
+    @Test
+    void listarGenerosDeLivrosAutoresBrasileiros() {
+        var resultado = repository.listarGenerosAutoresBrasileiros();
+        resultado.forEach(System.out::println);
+    }
+
 }
