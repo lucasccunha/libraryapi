@@ -34,12 +34,19 @@ public class AutorService {
     public List<Autor> pesquisa(String nome, String nacionalidade) {
         List<Autor> autores = repository.findAll();
 
+        if (nome != null && nacionalidade != null) {
+            return autores.stream()
+                    .filter(autor -> autor.getNome().equalsIgnoreCase(nome) &&
+                            autor.getNacionalidade().equalsIgnoreCase(nacionalidade))
+                    .collect(Collectors.toList());
+        }
         if (nome != null) {
-            autores = autores.stream()
+            return autores.stream()
                     .filter(autor -> autor.getNome().equalsIgnoreCase(nome))
-                    .collect(Collectors.toList()); }
+                    .collect(Collectors.toList());
+        }
         if (nacionalidade != null) {
-            autores = autores.stream()
+            return autores.stream()
                     .filter(autor -> autor.getNacionalidade().equalsIgnoreCase(nacionalidade))
                     .collect(Collectors.toList());
         }
