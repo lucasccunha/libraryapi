@@ -28,14 +28,14 @@ class LivroRepositoryTest {
         livro.setIsbn("90000-00000");
         livro.setPreco(BigDecimal.valueOf(100));
         livro.setGenero(GeneroLivro.CIENCIA);
-        livro.setTitulo("Ciencias");
+        livro.setTitulo("Livro Interessante");
         livro.setDataPublicacao(LocalDate.of(1980, 1, 2));
 
         Autor autor = autorRepository
-                .findById(UUID.fromString("c1b94416-8f30-403e-9d57-54ead105b780"))
+                .findById(UUID.fromString("f12b27e3-604d-484a-aa5e-cef480eae060"))
                 .orElse(null);
 
-        //livro.setAutor(new Autor());
+        livro.setAutor(autor);
 
         repository.save(livro);
     }
