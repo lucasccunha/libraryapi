@@ -1,17 +1,14 @@
-package io.github.spring.libraryapi.mapper;
+package io.github.spring.libraryapi.controller.mappers;
 
 import io.github.spring.libraryapi.controller.dto.AutorDTO;
 import io.github.spring.libraryapi.model.Autor;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface AutorMapper {
-    
-    AutorMapper INSTANCE = Mappers.getMapper(AutorMapper.class);
+
+    Autor toEntity(AutorDTO dto);
 
     AutorDTO toDTO(Autor autor);
 
-    Autor toEntity(AutorDTO autorDTO);
 }
-
