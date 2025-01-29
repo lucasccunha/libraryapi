@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/autores")
 @RequiredArgsConstructor
 
-public class AutorController {
+public class AutorController implements  GenericController{
 
     private final AutorService service;
     private final AutorMapper mapper;
@@ -34,7 +34,7 @@ public class AutorController {
             Autor autor = mapper.toEntity(dto);
             service.salvar(autor);
 
-            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(autor.getId()).toUri();
+            URI location = gerarHeaderLocation(autor.getId());
 
             return ResponseEntity.created(location).build();
         } catch (RegistroDuplicadoException e) {
@@ -75,7 +75,11 @@ public class AutorController {
     @GetMapping
     public ResponseEntity<List<AutorDTO>> pesquisar(@RequestParam(value = "nome", required = false) String nome, @RequestParam(value = "nacionalidade", required = false) String nacionalidade) {
         List<Autor> resultado = service.pesquisaByExample(nome, nacionalidade);
-        List<AutorDTO> lista = resultado.stream().map(autor -> new AutorDTO(autor.getId(), autor.getNome(), autor.getDataNascimento(), autor.getNacionalidade())).collect(Collectors.toList());
+        List<AutorDTO> lista = resultado
+                .stream()
+                .map(mapper::toDTO)
+                .collect(Collectors.toList());
+
         return ResponseEntity.ok(lista);
     }
 
