@@ -39,11 +39,12 @@ public class LivroController implements GenericController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Object> deletar(@PathVariable String id) {
+    public ResponseEntity<Void> deletar(@PathVariable String id) {
         return service.obterPorId(UUID.fromString(id))
                 .map(livro -> {
                     service.deletar(livro);
-                    return ResponseEntity.noContent().build();
+                    return ResponseEntity.noContent().<Void>build();
                 }).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
 }
