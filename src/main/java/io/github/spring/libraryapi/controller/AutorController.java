@@ -4,6 +4,10 @@ import io.github.spring.libraryapi.controller.dto.AutorDTO;
 import io.github.spring.libraryapi.controller.mappers.AutorMapper;
 import io.github.spring.libraryapi.model.Autor;
 import io.github.spring.libraryapi.service.AutorService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +27,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/autores")
 @RequiredArgsConstructor
+@Tag(name = "Autores")
 public class AutorController implements GenericController {
 
     private final AutorService service;
@@ -30,6 +35,13 @@ public class AutorController implements GenericController {
     private final ExecutorService executor = Executors.newFixedThreadPool(10);
 
     @PostMapping
+    @Operation(summary = "Salvar", description = "Cadastrar novo autor")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Cadastrado com sucesso"),
+            @ApiResponse(responseCode = "422", description = "Erro de validação."),
+            @ApiResponse(responseCode = "409", description = "Autor já cadastrado."),
+    }
+    )
     public CompletableFuture<ResponseEntity<Void>> salvar(@RequestBody @Valid AutorDTO dto) {
         return CompletableFuture.supplyAsync(() -> {
             Autor autor = mapper.toEntity(dto);
@@ -40,6 +52,12 @@ public class AutorController implements GenericController {
     }
 
     @GetMapping("{id}")
+    @Operation(summary = "Obter Detalhes", description = "Retorna os dados do autor pelo ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Cadastrado com sucesso."),
+            @ApiResponse(responseCode = "422", description = "Erro de validação."),
+            @ApiResponse(responseCode = "409", description = "Autor já cadastrado.")
+    })
     public CompletableFuture<ResponseEntity<AutorDTO>> obterDetalhes(@PathVariable("id") String id) {
         var idAutor = UUID.fromString(id);
         return CompletableFuture.supplyAsync(() -> {
@@ -78,6 +96,13 @@ public class AutorController implements GenericController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Atualizar", description = "Atualiza um autor existente")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Atualizado com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Autor não encontrado."),
+            @ApiResponse(responseCode = "409", description = "Autor já cadastrado.")
+    }
+    )
     public CompletableFuture<ResponseEntity<Void>> atualizar(@PathVariable("id") String id, @RequestBody @Valid AutorDTO dto) {
         var idAutor = UUID.fromString(id);
         return CompletableFuture.supplyAsync(() -> {
